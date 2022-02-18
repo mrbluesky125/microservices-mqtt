@@ -16,6 +16,7 @@ from datetime import datetime
 class MicroserviceClient:
     def __init__(self, serviceName):
         self._serviceName = serviceName
+        self._brokerip = os.environ["BROKER_IP"] if "BROKER_IP" in os.environ else ""
         self._clientId = str(uuid.uuid4())
         self._mqttClient = mqtt.Client(self._clientId)
         self._config = {}
@@ -36,9 +37,10 @@ class MicroserviceClient:
         self._mqttClient.username_pw_set("None", "None")
 
     def __enter__(self):
-        brokerip = os.environ["BROKER_IP"]
-        print("Connecting to MQTT-broker", brokerip, "...")
-        self._mqttClient.connect(brokerip)
+        if not self._brokerip:
+            print("No broker set!")
+        print("Connecting to MQTT-broker", self._brokerip, "...")
+        self._mqttClient.connect(self._brokerip)
         self._mqttClient.loop_start()
         while self._connected is False:
             time.sleep(0.1)
@@ -166,6 +168,9 @@ class MicroserviceClient:
         if self.on_binaryResult is not None:
             self.on_binaryResult(methodName, payload, id)
 
+    def brokerip(self):
+        return self._brokerip
+
     def clientId(self):
         return self._clientId
 
@@ -264,9 +269,10 @@ class MicroserviceClient:
         print("Binary notify sent to", topic)
 
     def start(self):
-        brokerip = os.environ["BROKER_IP"]
-        print("Connecting to MQTT-broker", brokerip, "...")
-        self._mqttClient.connect(brokerip)
+        if not self._brokerip:
+            print("No broker set!")
+        print("Connecting to MQTT-broker", self._brokerip, "...")
+        self._mqttClient.connect(self._brokerip)
         self._mqttClient.loop_start()
       
     def stop(self):
