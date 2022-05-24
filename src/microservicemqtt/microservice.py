@@ -94,7 +94,7 @@ class Microservice:
             messageId = matchBinaryCall.group(4)
             
             print("Call (Binary) " + methodName + " from " + clientId + " (old-style)")
-            self._on_binary_message_handler(id, payload, methodName, clientId, messageId)
+            self._on_binary_message_handler(payload, methodName, clientId, messageId)
        
     def _on_text_message_handler(self, messageObject, methodName, clientId):
  
