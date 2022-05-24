@@ -115,10 +115,6 @@ class Microservice:
         self._sendResult("json", messageId, clientId, payload)
             
     def _on_binary_message_handler(self, payload, methodName, clientId, messageId):
-       
-        if self._pendingRequests.get(id, None) is None:
-            print("Unknown/timed out reply (" + id + ") received.")
-            return
         
         callback = self._binaryProdcedureMap[methodName]
         result = callback(payload)
