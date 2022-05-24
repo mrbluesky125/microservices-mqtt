@@ -71,7 +71,7 @@ class Microservice:
         payload = msg.payload
         
         regexpCall = re.compile('microservice/(.+)/json/call/(.+)/(.+)')
-        regexpBinaryCall= re.compile('microservice/(.+)/binary/call/(.+)/(.+)')
+        regexpBinaryCall= re.compile('microservice/(.+)/binary/call/(.+)/(.+)/(.+)')
         regexpNotify = re.compile('microservice/(.+)/json/notify/(.+)/(.+)')
         regexpBinaryNotify = re.compile('microservice/(.+)/binary/notify/(.+)/(.+)')
         matchCall = regexpCall.search(topic)
@@ -91,9 +91,10 @@ class Microservice:
             serviceName = matchBinaryCall.group(1)
             methodName = matchBinaryCall.group(2)
             clientId = matchBinaryCall.group(3)
+            messageId = matchBinaryCall.group(4)
             
             print("Call (Binary) " + methodName + " from " + clientId + " (old-style)")
-            self._on_binary_message_handler(id, payload)
+            self._on_binary_message_handler(id, payload, methodName, clientId, messageId)
        
     def _on_text_message_handler(self, messageObject, methodName, clientId):
  

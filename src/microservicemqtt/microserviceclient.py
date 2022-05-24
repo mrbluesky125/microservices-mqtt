@@ -63,13 +63,13 @@ class MicroserviceClient:
             self._mqttClient.subscribe("microservice/" + self.serviceName() + "/json/notification/#")
             self._mqttClient.subscribe("microservice/" + self.serviceName() + "/binary/notification/#")
             if self.on_connected is not None:
-                self.on_connected(self)
+                self.on_connected()
 
     def _on_disconnect_handler(self, client, userdata, rc):
         self._connected = False
         print("Disconnected")
         if self.on_disconnected is not None:
-            self.on_disconnected(self)
+            self.on_disconnected()
 
     def _on_message_handler(self, client, userdata, msg):
         topic = msg.topic
@@ -141,7 +141,7 @@ class MicroserviceClient:
         
         pendingRequests = self._pendingRequests.get(id, None)
         methodName = pendingRequests.get("method", None)
-        errorObject = pendingRequests.get("error", None)
+        errorObject = resultObject.get("error", None)
         sync = pendingRequests.get("sync", True)
         del self._pendingRequests[id]
         
