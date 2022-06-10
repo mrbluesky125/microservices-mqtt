@@ -141,7 +141,7 @@ class MicroserviceClient:
         
         pendingRequests = self._pendingRequests.get(id, None)
         methodName = pendingRequests.get("method", None)
-        errorObject = resultObject.get("error", None)
+        errorObject = resultObject.get("error", None) if type(resultObject) is dict else None
         sync = pendingRequests.get("sync", True)
         del self._pendingRequests[id]
         
